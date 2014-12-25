@@ -1,6 +1,10 @@
 <h1>Welcome to the Online store</h1>
 <h3>
 
+<form action="/users/new">
+	<button type="submit" value="Sign up">Sign up</button>
+</form>
+
 <ul>
 	<% @item.each do |item| %>
 	<li><%= item.item_name %><br>Price: <%= item.price %><br><%= item.brand %></li>
