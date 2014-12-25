@@ -11,7 +11,6 @@ feature "User browses the list of links" do
 
 	scenario "Items are listed on the home page" do
 		visit '/'
-		save_and_open_page
 		expect(page).to have_content("Adidas Tshirt")
 		expect(page).to have_content("Price: 20")
 		expect(page).to have_content("Adidas")

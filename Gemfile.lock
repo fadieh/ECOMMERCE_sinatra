@@ -122,6 +122,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bcrypt-ruby
   bundler
   capybara
   cucumber
