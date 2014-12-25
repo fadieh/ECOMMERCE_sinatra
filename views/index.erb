@@ -2,7 +2,7 @@
 <h3>
 
 <ul>
-	<li>T-shirt</li>
-	<li>Jeans</li>
-	<li>Accessories</li>
+	<% @item.each do |item| %>
+	<li><%= item.item_name %><br>Price: <%= item.price %><br><%= item.brand %></li>
+	<% end %>
 </ul>

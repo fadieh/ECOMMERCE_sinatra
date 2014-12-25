@@ -1,4 +1,19 @@
-require 'sinatra/base'
+require 'sinatra'
+require 'data_mapper'
+
+env = ENV["RACK_ENV"] || "development"
+
+# telling datamapper to use a postgres database on local host.
+DataMapper.setup(:default, "postgres://localhost/eastjam_#{env}")
+
+# this needs to be done after DataMapper has initialised.
+require './lib/item'
+
+# After declaring models, should finalise them
+DataMapper.finalize
+
+# However, database tables don't exist yet, tell datamapper to create them
+DataMapper.auto_upgrade!
 
 class Ecommerce < Sinatra::Base
 
@@ -9,6 +24,7 @@ class Ecommerce < Sinatra::Base
 	# routing
 
 	get '/' do
+		@item = Item.all
 		erb :index
 	end
 
