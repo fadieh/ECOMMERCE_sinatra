@@ -10,7 +10,19 @@
 	<% end %>
 
 	<% if current_user %>
-	<h3>Welcome, <%= current_user.email %></h3>
+	Welcome, <%= current_user.email %>
+	<form method="post" action="/sessions">
+		<input type="hidden" name="_method" value="delete">
+		Sign out<input type="submit" value="Sign out">
+	</form>
 	<% end %>
+
 	<%= yield %>
+
+	<% if flash[:notice] %>
+	<div id="notice">
+		<%= flash[:notice] %>
+	</div>
+	<% end %>
+
 </body>
