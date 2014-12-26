@@ -5,6 +5,10 @@
 	<button type="submit" value="Sign up">Sign up</button>
 </form>
 
+<form action="/sessions/new">
+	<button type="submit" value="Sign in">Sign in</button>
+</form>
+
 <ul>
 	<% @item.each do |item| %>
 	<li><%= item.item_name %><br>Price: <%= item.price %><br><%= item.brand %></li>
