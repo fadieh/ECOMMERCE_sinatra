@@ -48,7 +48,7 @@ class Ecommerce < Sinatra::Base
 			session[:user_id] = @user.id
 			redirect to('/')
 		else
-			flash[:notice] = "Sorry, your passwords don't match"
+			flash.now[:errors] = @user.errors.full_messages
 			erb :"users/new"
 		end
 	end
