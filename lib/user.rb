@@ -9,6 +9,9 @@ class User
 
 	property :password_digest,	Text
 
+	property :password_token,	String
+	property :password_token_timestamp,	Time
+
 	attr_reader :password
 	attr_accessor :password_confirmation
 
@@ -28,5 +31,7 @@ class User
 			nil
 		end
 	end
+
+	
 
 end

@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'data_mapper'
 require 'rack-flash'
+require 'rest_client'
 
 env = ENV["RACK_ENV"] || "development"
 
@@ -20,8 +21,11 @@ DataMapper.auto_upgrade!
 class Ecommerce < Sinatra::Base
 
 	set :views, Proc.new {File.join(root, 'views')}
+
 	set :public_dir, Proc.new {File.join(root, 'public')}
 	set :public_folder, 'public'
+
+	set :show_exceptions, false
 
 	enable :sessions
 	set :session_secret, 'super secret'
@@ -74,6 +78,37 @@ class Ecommerce < Sinatra::Base
 		flash[:notice] = "Good bye!"
 		session[:user_id] = nil
 		redirect to('/')
+	end
+
+	get '/users/reset_password' do
+		erb :"users/reset_password"
+	end
+
+	def send_reset_email(email, token)
+		RestClient.post "https://api:key-9697e2ab8b43fcf3bcef4b16a489d1fc"\
+  		"@api.mailgun.net/v2/sandbox4e7aa7e546fe470fa8374cfef666b223.mailgun.org/messages", 
+		:from => "EastJam Team <postmaster@sandbox4e7aa7e546fe470fa8374cfef666b223.mailgun.org>",
+		:to => "#{email}",
+		:subject => "Reset your password",
+		:text => "1Click this link to reset your password. http://localhost:9292/users/reset_password/#{token}"
+	end
+
+	post '/users/reset' do
+		email = params[:email]
+		@email = email
+		user = User.first(:email => email)
+		if user
+			user.password_token = (1..64).map{('A'..'Z').to_a.sample}.join
+			@token = user.password_token
+			user.password_token_timestamp = Time.now
+			user.save
+			send_reset_email(@email, @token)
+			flash[:notice] = "Your email to reset your password has been sent!"
+			erb :"users/reset_password"
+		else
+			flash[:notice] = "Sorry, we do not recognise that email address. Please try again."
+			erb :"users/reset_password"
+		end
 	end
 
 	run! if app_file == $0
