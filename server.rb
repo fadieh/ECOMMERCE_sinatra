@@ -87,10 +87,10 @@ class Ecommerce < Sinatra::Base
 	def send_reset_email(email, token)
 		RestClient.post "https://api:key-9697e2ab8b43fcf3bcef4b16a489d1fc"\
   		"@api.mailgun.net/v2/sandbox4e7aa7e546fe470fa8374cfef666b223.mailgun.org/messages", 
-		:from => "EastJam Team <postmaster@sandbox4e7aa7e546fe470fa8374cfef666b223.mailgun.org>",
+		:from => "Team <postmaster@sandbox4e7aa7e546fe470fa8374cfef666b223.mailgun.org>",
 		:to => "#{email}",
 		:subject => "Reset your password",
-		:text => "1Click this link to reset your password. http://localhost:9292/users/reset_password/#{token}"
+		:text => "Test to see if it has taken email params. http://localhost:9292/users/reset_password/#{token}"
 	end
 
 	post '/users/reset' do
@@ -108,6 +108,14 @@ class Ecommerce < Sinatra::Base
 		else
 			flash[:notice] = "Sorry, we do not recognise that email address. Please try again."
 			erb :"users/reset_password"
+		end
+	end
+
+	get '/users/reset_password/:token' do
+		token = params[:token]
+		user = User.first(:password_token => token)
+		if user
+			erb :"users/reset_password_page"
 		end
 	end
 
